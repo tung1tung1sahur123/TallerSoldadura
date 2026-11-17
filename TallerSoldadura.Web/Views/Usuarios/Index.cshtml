@@ -1,0 +1,26 @@
+@model List<Usuario>
+@{ ViewData["Title"] = "Usuarios"; }
+<div class="d-flex justify-content-between align-items-center"><h1>Usuarios</h1><a class="btn btn-primary" asp-action="Crear">Registrar usuario</a></div>
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-5"><input name="q" value="@ViewBag.Q" class="form-control" placeholder="Buscar por nombre, correo o matrícula" /></div>
+    <div class="col-auto"><button class="btn btn-outline-primary">Buscar</button></div>
+</form>
+<table class="table table-bordered bg-white align-middle">
+    <thead><tr><th>Nombre</th><th>Matrícula</th><th>Correo</th><th>Roles</th><th>Estado</th><th></th></tr></thead>
+    <tbody>
+    @foreach (var u in Model)
+    {
+        <tr class="@(u.Activo ? "" : "text-muted")">
+            <td>@u.NombreCompleto</td><td>@u.Matricula</td><td>@u.CorreoInstitucional</td>
+            <td>@string.Join(", ", u.Roles.Select(r => r.Rol.NombreRol))</td>
+            <td>@(u.Activo ? "Activo" : "Inactivo")</td>
+            <td class="text-nowrap">
+                <a class="btn btn-sm btn-outline-primary" asp-action="Editar" asp-route-id="@u.IdUsuario">Modificar</a>
+                <form asp-action="CambiarEstado" asp-route-id="@u.IdUsuario" method="post" class="d-inline" onsubmit="return confirm('¿Confirmas el cambio de estado de la cuenta?')">
+                    <button class="btn btn-sm @(u.Activo ? "btn-outline-danger" : "btn-outline-success")">@(u.Activo ? "Desactivar" : "Reactivar")</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

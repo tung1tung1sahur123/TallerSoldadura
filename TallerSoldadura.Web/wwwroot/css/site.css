@@ -1,0 +1,11 @@
+:root { --une-rojo: #9E0000; --une-azul: #1F3864; }
+body { background: #f6f7fb; min-height: 100vh; }
+.une-nav { background: var(--une-azul); }
+.une-barra { height: 8px; background: linear-gradient(90deg, #C2185B, #3949AB); position: fixed; bottom: 0; left: 0; right: 0; }
+h1, h2 { color: var(--une-azul); font-weight: 700; }
+.titulo-rojo { color: var(--une-rojo); }
+.table thead th { background: var(--une-azul); color: #fff; }
+.badge.pendiente { background: #f0ad4e; } .badge.autorizada { background: #198754; }
+.badge.rechazada { background: #dc3545; } .badge.cancelada { background: #6c757d; }
+.card-acceso { border-top: 4px solid var(--une-rojo); }
+@media print { .une-nav, .une-barra, .no-print { display: none !important; } body { background: #fff; } }

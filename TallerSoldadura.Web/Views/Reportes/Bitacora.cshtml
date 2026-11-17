@@ -1,0 +1,19 @@
+@model List<BitacoraMovimiento>
+@{ ViewData["Title"] = "Bitácora"; string d = ((DateOnly)ViewBag.Desde).ToString("yyyy-MM-dd"), h = ((DateOnly)ViewBag.Hasta).ToString("yyyy-MM-dd"); }
+<h1>Bitácora de movimientos</h1>
+<form method="get" class="row g-2 align-items-end mb-3">
+    <div class="col-auto"><label class="form-label">Desde</label><input type="date" name="desde" value="@d" class="form-control" /></div>
+    <div class="col-auto"><label class="form-label">Hasta</label><input type="date" name="hasta" value="@h" class="form-control" /></div>
+    <div class="col-auto"><button class="btn btn-outline-primary">Consultar</button></div>
+</form>
+<table class="table table-bordered table-sm bg-white">
+    <thead><tr><th>Fecha</th><th>Folio</th><th>Actor</th><th>Acción</th><th>Antes</th><th>Después</th></tr></thead>
+    <tbody>
+    @if (Model.Count == 0) { <tr><td colspan="6">Sin movimientos en este periodo.</td></tr> }
+    @foreach (var b in Model)
+    {
+        <tr><td>@b.FechaEvento.ToString("dd/MM/yyyy HH:mm")</td><td>@b.IdReservacion</td><td>@(b.Actor?.NombreCompleto ?? "Sistema")</td>
+            <td>@b.Accion</td><td><code>@b.ValorAnterior</code></td><td><code>@b.ValorNuevo</code></td></tr>
+    }
+    </tbody>
+</table>

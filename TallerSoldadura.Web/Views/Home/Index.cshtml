@@ -1,0 +1,38 @@
+@{ ViewData["Title"] = "Inicio"; }
+<h1>Hola, @User.Identity?.Name</h1>
+<p class="text-muted">Sistema de reservación del taller de soldadura de la Universidad del Noreste.</p>
+<div class="row g-3">
+@if (User.IsInRole("alumno"))
+{
+    <div class="col-md-4"><div class="card card-acceso h-100"><div class="card-body">
+        <h5>Reservar el taller</h5><p>Consulta los horarios libres y envía tu solicitud.</p>
+        <a class="btn btn-primary" asp-controller="Reservaciones" asp-action="Calendario">Ver calendario</a>
+    </div></div></div>
+    <div class="col-md-4"><div class="card card-acceso h-100"><div class="card-body">
+        <h5>Mis reservaciones</h5><p>Revisa el estado, cancela o descarga tu comprobante.</p>
+        <a class="btn btn-primary" asp-controller="Reservaciones" asp-action="Mias">Abrir</a>
+    </div></div></div>
+}
+@if (User.IsInRole("maestro"))
+{
+    <div class="col-md-4"><div class="card card-acceso h-100"><div class="card-body">
+        <h5>Solicitudes pendientes</h5><p>Autoriza o rechaza las solicitudes de los alumnos.</p>
+        <a class="btn btn-primary" asp-controller="Maestro" asp-action="Pendientes">Revisar</a>
+    </div></div></div>
+    <div class="col-md-4"><div class="card card-acceso h-100"><div class="card-body">
+        <h5>Reservaciones del día</h5><p>Registra la entrada y salida real de cada alumno.</p>
+        <a class="btn btn-primary" asp-controller="Maestro" asp-action="DelDia">Abrir</a>
+    </div></div></div>
+}
+@if (User.IsInRole("administrador"))
+{
+    <div class="col-md-4"><div class="card card-acceso h-100"><div class="card-body">
+        <h5>Usuarios</h5><p>Alta, modificación, desactivación y roles.</p>
+        <a class="btn btn-primary" asp-controller="Usuarios" asp-action="Index">Administrar</a>
+    </div></div></div>
+    <div class="col-md-4"><div class="card card-acceso h-100"><div class="card-body">
+        <h5>Horarios de apertura</h5><p>Días y horas en que el taller acepta reservaciones.</p>
+        <a class="btn btn-primary" asp-controller="Horarios" asp-action="Index">Configurar</a>
+    </div></div></div>
+}
+</div>

@@ -1,0 +1,30 @@
+@model Usuario
+@{
+    bool nuevo = Model.IdUsuario == 0;
+    ViewData["Title"] = nuevo ? "Registrar usuario" : "Modificar usuario";
+    var roles = (List<Rol>)ViewBag.Roles;
+    var asignados = Model.Roles.Select(r => r.IdRol).ToHashSet();
+}
+<h1>@ViewData["Title"]</h1>
+<form asp-action="@(nuevo ? "Crear" : "Editar")" asp-route-id="@(nuevo ? null : Model.IdUsuario)" method="post" class="card card-body bg-white" style="max-width:640px">
+    <div class="row">
+        <div class="col-md-6 mb-3"><label class="form-label">Nombre</label><input name="Nombre" value="@Model.Nombre" class="form-control" maxlength="80" required /></div>
+        <div class="col-md-6 mb-3"><label class="form-label">Apellidos</label><input name="Apellidos" value="@Model.Apellidos" class="form-control" maxlength="120" required /></div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3"><label class="form-label">Correo institucional</label><input name="CorreoInstitucional" type="email" value="@Model.CorreoInstitucional" class="form-control" maxlength="254" required /></div>
+        <div class="col-md-6 mb-3"><label class="form-label">Matrícula <small class="text-muted">(obligatoria para alumnos)</small></label><input name="Matricula" value="@Model.Matricula" class="form-control" maxlength="20" /></div>
+    </div>
+    <div class="mb-3"><label class="form-label">Contraseña @(nuevo ? "" : "(déjala vacía para no cambiarla)")</label>
+        <input name="contrasena" type="password" class="form-control" minlength="8" @(nuevo ? "required" : "") /></div>
+    <div class="mb-3"><label class="form-label d-block">Roles</label>
+        @foreach (var r in roles)
+        {
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="roles" value="@r.IdRol" id="rol@(r.IdRol)" @(asignados.Contains(r.IdRol) ? "checked" : "") />
+                <label class="form-check-label" for="rol@(r.IdRol)">@r.NombreRol</label>
+            </div>
+        }
+    </div>
+    <div><button class="btn btn-primary">Guardar</button> <a class="btn btn-link" asp-action="Index">Cancelar</a></div>
+</form>

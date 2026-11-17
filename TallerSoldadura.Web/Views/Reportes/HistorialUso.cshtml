@@ -1,0 +1,36 @@
+@model List<Asistencia>
+@{
+    ViewData["Title"] = "Historial de uso";
+    string d = ((DateOnly)ViewBag.Desde).ToString("yyyy-MM-dd"), h = ((DateOnly)ViewBag.Hasta).ToString("yyyy-MM-dd");
+    var concluidos = Model.Where(a => a.SalidaReal != null).ToList();
+}
+<h1>Historial de uso del taller</h1>
+<form method="get" class="row g-2 align-items-end mb-3 no-print">
+    <div class="col-auto"><label class="form-label">Desde</label><input type="date" name="desde" value="@d" class="form-control" /></div>
+    <div class="col-auto"><label class="form-label">Hasta</label><input type="date" name="hasta" value="@h" class="form-control" /></div>
+    <div class="col-auto"><button class="btn btn-outline-primary">Consultar</button></div>
+    @if (User.IsInRole("maestro"))
+    {
+        <div class="col-auto"><a class="btn btn-success" asp-action="Exportar" asp-route-desde="@d" asp-route-hasta="@h">Exportar a Excel (CSV)</a></div>
+    }
+</form>
+<div class="row g-3 mb-3">
+    <div class="col-md-3"><div class="card card-body"><small>Usos registrados</small><span class="fs-4 fw-bold">@Model.Count</span></div></div>
+    <div class="col-md-3"><div class="card card-body"><small>Usos concluidos</small><span class="fs-4 fw-bold">@concluidos.Count</span></div></div>
+    <div class="col-md-3"><div class="card card-body"><small>Minutos de uso</small><span class="fs-4 fw-bold">@concluidos.Sum(a => a.DuracionMinutos ?? 0).ToString("0")</span></div></div>
+    <div class="col-md-3"><div class="card card-body"><small>Alumnos distintos</small><span class="fs-4 fw-bold">@Model.Select(a => a.Reservacion.IdAlumno).Distinct().Count()</span></div></div>
+</div>
+<table class="table table-bordered bg-white">
+    <thead><tr><th>Folio</th><th>Alumno</th><th>Matrícula</th><th>Fecha</th><th>Entrada real</th><th>Salida real</th><th>Duración (min)</th></tr></thead>
+    <tbody>
+    @if (Model.Count == 0) { <tr><td colspan="7">No hay usos en este periodo.</td></tr> }
+    @foreach (var a in Model)
+    {
+        <tr>
+            <td>@a.IdReservacion</td><td>@a.Reservacion.Alumno.NombreCompleto</td><td>@a.Reservacion.Alumno.Matricula</td>
+            <td>@a.Reservacion.FechaUso.ToString("dd/MM/yyyy")</td><td>@a.EntradaReal.ToString("HH:mm")</td>
+            <td>@(a.SalidaReal?.ToString("HH:mm") ?? "salida pendiente")</td><td>@a.DuracionMinutos?.ToString("0.00")</td>
+        </tr>
+    }
+    </tbody>
+</table>

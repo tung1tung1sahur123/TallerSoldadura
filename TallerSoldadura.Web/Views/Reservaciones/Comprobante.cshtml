@@ -1,0 +1,19 @@
+@model Reservacion
+@{ ViewData["Title"] = "Comprobante"; }
+<div class="card bg-white mx-auto" style="max-width:600px">
+    <div class="card-body p-4">
+        <h2 class="titulo-rojo h4">Comprobante de reservación</h2>
+        <p class="text-muted">Taller de soldadura · Universidad del Noreste</p>
+        <table class="table">
+            <tr><th>Folio</th><td>@Model.IdReservacion</td></tr>
+            <tr><th>Alumno</th><td>@Model.Alumno.NombreCompleto</td></tr>
+            <tr><th>Matrícula</th><td>@Model.Alumno.Matricula</td></tr>
+            <tr><th>Fecha de uso</th><td>@Model.FechaUso.ToString("dd/MM/yyyy")</td></tr>
+            <tr><th>Horario</th><td>@Model.HoraEntrada.ToString("HH\\:mm") – @Model.HoraSalida.ToString("HH\\:mm")</td></tr>
+            <tr><th>Estado</th><td><partial name="_Estado" model="Model.Estado" /></td></tr>
+            @if (Model.ComentarioRevision is not null) { <tr><th>Indicaciones</th><td>@Model.ComentarioRevision</td></tr> }
+        </table>
+        <p class="small text-muted">Presenta este folio al maestro encargado al llegar al taller.</p>
+        <button class="btn btn-primary no-print" onclick="window.print()">Imprimir</button>
+    </div>
+</div>

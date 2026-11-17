@@ -1,0 +1,31 @@
+@model List<Reservacion>
+@{ ViewData["Title"] = "Mis reservaciones"; var hoy = DateOnly.FromDateTime(DateTime.Today); }
+<h1>Mis reservaciones</h1>
+<table class="table table-bordered bg-white align-middle">
+    <thead><tr><th>Folio</th><th>Fecha</th><th>Horario</th><th>Estado</th><th>Comentario del maestro</th><th></th></tr></thead>
+    <tbody>
+    @if (Model.Count == 0) { <tr><td colspan="6">Aún no tienes solicitudes.</td></tr> }
+    @foreach (var r in Model)
+    {
+        <tr>
+            <td>@r.IdReservacion</td>
+            <td>@r.FechaUso.ToString("dd/MM/yyyy")</td>
+            <td>@r.HoraEntrada.ToString("HH\\:mm") – @r.HoraSalida.ToString("HH\\:mm")</td>
+            <td><partial name="_Estado" model="r.Estado" /></td>
+            <td>@r.ComentarioRevision</td>
+            <td class="text-nowrap">
+                @if (r.Estado == Estados.Autorizada)
+                {
+                    <a class="btn btn-sm btn-outline-primary" asp-action="Comprobante" asp-route-id="@r.IdReservacion">Comprobante</a>
+                    @if (hoy < r.FechaUso)
+                    {
+                        <form asp-action="Cancelar" asp-route-id="@r.IdReservacion" method="post" class="d-inline" onsubmit="return confirm('¿Seguro que quieres cancelar esta reservación?')">
+                            <button class="btn btn-sm btn-outline-danger">Cancelar</button>
+                        </form>
+                    }
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

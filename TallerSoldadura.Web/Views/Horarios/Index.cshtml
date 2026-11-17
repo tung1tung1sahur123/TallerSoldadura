@@ -1,0 +1,24 @@
+@model List<HorarioApertura>
+@{ ViewData["Title"] = "Horarios de apertura"; }
+<h1>Horarios de apertura</h1>
+<form asp-action="Crear" method="post" class="row g-2 align-items-end mb-4 card card-body bg-white flex-row">
+    <div class="col-auto"><label class="form-label">Día</label>
+        <select name="diaSemana" class="form-select">@for (short i = 1; i <= 7; i++) { <option value="@i">@HorarioApertura.Dias[i]</option> }</select></div>
+    <div class="col-auto"><label class="form-label">Apertura</label><input type="time" name="horaApertura" class="form-control" required /></div>
+    <div class="col-auto"><label class="form-label">Cierre</label><input type="time" name="horaCierre" class="form-control" required /></div>
+    <div class="col-auto"><button class="btn btn-primary">Agregar franja</button></div>
+</form>
+<table class="table table-bordered bg-white align-middle">
+    <thead><tr><th>Día</th><th>Apertura</th><th>Cierre</th><th>Estado</th><th></th></tr></thead>
+    <tbody>
+    @foreach (var h in Model)
+    {
+        <tr class="@(h.Activo ? "" : "text-muted")">
+            <td>@h.NombreDia</td><td>@h.HoraApertura.ToString("HH\\:mm")</td><td>@h.HoraCierre.ToString("HH\\:mm")</td>
+            <td>@(h.Activo ? "Activa" : "Inactiva")</td>
+            <td><form asp-action="CambiarEstado" asp-route-id="@h.IdHorario" method="post">
+                <button class="btn btn-sm @(h.Activo ? "btn-outline-danger" : "btn-outline-success")">@(h.Activo ? "Desactivar" : "Activar")</button></form></td>
+        </tr>
+    }
+    </tbody>
+</table>

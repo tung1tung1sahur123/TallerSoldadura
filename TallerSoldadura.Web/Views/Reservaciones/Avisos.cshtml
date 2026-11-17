@@ -1,0 +1,13 @@
+@model List<Notificacion>
+@{ ViewData["Title"] = "Avisos"; }
+<h1>Avisos</h1>
+<div class="list-group">
+@if (Model.Count == 0) { <div class="list-group-item">No tienes avisos.</div> }
+@foreach (var n in Model)
+{
+    <div class="list-group-item">
+        <div class="d-flex justify-content-between"><partial name="_Estado" model="n.EstadoNotificado" /><small class="text-muted">@n.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</small></div>
+        <div class="mt-1">@n.Mensaje</div>
+    </div>
+}
+</div>

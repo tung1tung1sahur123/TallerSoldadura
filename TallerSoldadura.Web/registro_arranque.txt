@@ -1,0 +1,9 @@
+2026-11-12 17:37:21 Iniciando aplicación...
+2026-11-12 17:37:36 Conexión a SQL Server correcta. Usuarios en la base: 4
+2026-11-12 17:37:38 Aplicación lista en: http://localhost:5000
+2026-11-13 06:49:53 Iniciando aplicación...
+2026-11-13 06:49:56 Conexión a SQL Server correcta. Usuarios en la base: 4
+2026-11-13 06:49:56 Aplicación lista en: http://localhost:5000
+2026-11-17 12:57:53 Iniciando aplicación...
+2026-11-17 12:58:02 Conexión a SQL Server correcta. Usuarios en la base: 4
+2026-11-17 12:58:03 Aplicación lista en: http://localhost:5000

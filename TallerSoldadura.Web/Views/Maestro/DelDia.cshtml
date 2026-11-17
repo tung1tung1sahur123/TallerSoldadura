@@ -1,0 +1,34 @@
+@model List<Reservacion>
+@{ ViewData["Title"] = "Reservaciones del día"; var fecha = (DateOnly)ViewBag.Fecha; var f = fecha.ToString("yyyy-MM-dd"); }
+<h1>Reservaciones del día</h1>
+<form method="get" class="row g-2 align-items-end mb-3">
+    <div class="col-auto"><input type="date" name="fecha" value="@f" class="form-control" /></div>
+    <div class="col-auto"><button class="btn btn-outline-primary">Consultar</button></div>
+</form>
+<table class="table table-bordered bg-white align-middle">
+    <thead><tr><th>Folio</th><th>Alumno</th><th>Matrícula</th><th>Horario programado</th><th>Entrada real</th><th>Salida real</th></tr></thead>
+    <tbody>
+    @if (Model.Count == 0) { <tr><td colspan="6">No hay reservaciones autorizadas para este día.</td></tr> }
+    @foreach (var r in Model)
+    {
+        <tr>
+            <td>@r.IdReservacion</td><td>@r.Alumno.NombreCompleto</td><td>@r.Alumno.Matricula</td>
+            <td>@r.HoraEntrada.ToString("HH\\:mm") – @r.HoraSalida.ToString("HH\\:mm")</td>
+            <td>
+                @if (r.Asistencia is null)
+                {
+                    <form asp-action="Entrada" asp-route-id="@r.IdReservacion" asp-route-fecha="@f" method="post"><button class="btn btn-sm btn-primary">Registrar entrada</button></form>
+                }
+                else { @r.Asistencia.EntradaReal.ToString("HH:mm") }
+            </td>
+            <td>
+                @if (r.Asistencia is not null && r.Asistencia.SalidaReal is null)
+                {
+                    <form asp-action="Salida" asp-route-id="@r.IdReservacion" asp-route-fecha="@f" method="post"><button class="btn btn-sm btn-outline-primary">Registrar salida</button></form>
+                }
+                else if (r.Asistencia?.SalidaReal is DateTime s) { @s.ToString("HH:mm") }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
